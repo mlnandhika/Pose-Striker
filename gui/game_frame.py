@@ -1,0 +1,59 @@
+import tkinter as tk
+from camera.camera_feed import CameraFeed
+from PIL import Image, ImageTk
+from gui.game_review import GameReview
+import threading
+import time
+
+class GameFrame(tk.Frame):
+    def __init__(self, parent, player_name, cluster, leaderboard, chances):
+        super().__init__(parent)
+        self.player_name = player_name
+        self.cluster = cluster
+        self.leaderboard = leaderboard
+        self.time_left = 3  # Time limit for the game
+        self.score = 0
+        self.chances = 3
+
+        # Display score and time left
+        self.top_frame = tk.Frame(self)
+        self.top_frame.pack(pady=5)
+        self.score_label = tk.Label(self.top_frame, text=f"Score: {self.score}")
+        self.score_label.pack(side=tk.LEFT, padx=10)
+        self.timer_label = tk.Label(self.top_frame, text=f"Time left: {self.time_left}")
+        self.timer_label.pack(side=tk.LEFT, padx=10)
+
+        # Reference image and video feed
+        self.middle_frame = tk.Frame(self)
+        self.middle_frame.pack(pady=10)
+
+        self.reference_img = Image.open("assets/reference_poses/dummy_pose1.jpg")
+        self.reference_img = self.reference_img.resize((200, 200), resample=3)
+        self.reference_imgtk = ImageTk.PhotoImage(self.reference_img)
+        self.reference_label = tk.Label(self.middle_frame, image=self.reference_imgtk)
+        self.reference_label.pack(side=tk.LEFT, padx=20)
+
+        self.video_label = tk.Label(self.middle_frame)
+        self.video_label.pack(side=tk.LEFT, padx=20)
+
+        self.camera_feed = CameraFeed(self.video_label)
+        threading.Thread(target=self.update_timer, daemon=True).start()
+
+        # Give up button
+        self.give_up_button = tk.Button(self, text="Give Up", command=self.end_game)
+        self.give_up_button.pack(pady=10)
+
+    def update_timer(self):
+        while self.time_left > 0:
+            time.sleep(1)
+            self.time_left -= 1
+            self.timer_label.config(text=f"Time left: {self.time_left}")
+        self.end_game()
+
+    def end_game(self):
+        self.chances -= 1
+        self.camera_feed.stop()
+        self.pack_forget()
+        # Transition to session review
+        game_review = GameReview(self.master, self.player_name, self.score, self.leaderboard, self.chances)
+        game_review.pack(fill=tk.BOTH, expand=True)

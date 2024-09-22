@@ -6,7 +6,7 @@ import os
 import random
 
 class poseDetector():
-    def __init__(self, mode=False, model_complexity=1, smooth=True,
+    def __init__(self, mode=False, model_complexity=2, smooth=True,
                  enable_segmentation=False, smooth_segmentation=True,
                  detectionCon=0.5, trackCon=0.5):
         self.mode = mode
@@ -153,5 +153,5 @@ def main():
     cap.release()
     cv2.destroyAllWindows()
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+main()
