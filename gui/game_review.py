@@ -2,12 +2,13 @@ import tkinter as tk
 from gui.components import ScrollableLeaderboard
 
 class GameReview(tk.Frame):
-    def __init__(self, parent, player_name, player_score, leaderboard, attempts_left):
+    def __init__(self, parent, player_name, player_cluster, player_score, leaderboard, chances):
         super().__init__(parent)
         self.player_name = player_name
+        self.player_cluster = player_cluster
         self.player_score = player_score
         self.leaderboard = leaderboard
-        self.attempts_left = attempts_left
+        self.chances = chances
         
         # Get the player's rank in the leaderboard
         player_rank = self.get_player_rank()
@@ -40,11 +41,11 @@ class GameReview(tk.Frame):
             self.player_ranking_label.pack(pady=10)
 
         # Attempts left label
-        self.attempts_label = tk.Label(self, text=f"Attempts Left: {self.attempts_left}")
+        self.attempts_label = tk.Label(self, text=f"Attempts Left: {self.chances}")
         self.attempts_label.pack(pady=5)
 
         # Play Again button (only show if attempts are left)
-        if self.attempts_left > 0:
+        if self.chances > 0:
             self.play_again_button = tk.Button(self, text="Play Again", command=self.play_again)
             self.play_again_button.pack(pady=5)
         
@@ -65,7 +66,15 @@ class GameReview(tk.Frame):
     def play_again(self):
         self.pack_forget()  # Hide review frame
         # Go back to the main game frame (this part depends on how you manage transitions)
+        from gui.game_frame import GameFrame
+        game_frame = GameFrame(self.master, self.player_name, self.player_cluster, self.leaderboard, self.chances)
+        game_frame.pack(fill=tk.BOTH, expand=True)
 
     def return_to_main_menu(self):
         self.pack_forget()
         # Go back to main menu
+        from gui.main_menu import MainMenu
+        main_menu = MainMenu(self.master, self.leaderboard)
+        main_menu.pack(fill=tk.BOTH, expand=True)
+
+        

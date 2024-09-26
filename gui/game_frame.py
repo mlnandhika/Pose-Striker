@@ -1,19 +1,18 @@
 import tkinter as tk
 from camera.camera_feed import CameraFeed
 from PIL import Image, ImageTk
-from gui.game_review import GameReview
 import threading
 import time
 
 class GameFrame(tk.Frame):
-    def __init__(self, parent, player_name, cluster, leaderboard, chances):
+    def __init__(self, parent, player_name, cluster, leaderboard, chances, timer_running=True):
         super().__init__(parent)
         self.player_name = player_name
         self.cluster = cluster
         self.leaderboard = leaderboard
         self.time_left = 3  # Time limit for the game
         self.score = 0
-        self.chances = 3
+        self.chances = chances
 
         # Display score and time left
         self.top_frame = tk.Frame(self)
@@ -37,6 +36,7 @@ class GameFrame(tk.Frame):
         self.video_label.pack(side=tk.LEFT, padx=20)
 
         self.camera_feed = CameraFeed(self.video_label)
+        self.timer_running = True
         threading.Thread(target=self.update_timer, daemon=True).start()
 
         # Give up button
@@ -44,16 +44,19 @@ class GameFrame(tk.Frame):
         self.give_up_button.pack(pady=10)
 
     def update_timer(self):
-        while self.time_left > 0:
+        while self.time_left > 0 and self.timer_running:
             time.sleep(1)
             self.time_left -= 1
             self.timer_label.config(text=f"Time left: {self.time_left}")
-        self.end_game()
+        if self.timer_running: # this is executed upon timer timeout, not upon Give Up button press
+            self.end_game()
 
     def end_game(self):
+        self.timer_running = False
         self.chances -= 1
         self.camera_feed.stop()
         self.pack_forget()
         # Transition to session review
-        game_review = GameReview(self.master, self.player_name, self.score, self.leaderboard, self.chances)
+        from gui.game_review import GameReview
+        game_review = GameReview(self.master, self.player_name, self.cluster, self.score, self.leaderboard, self.chances)
         game_review.pack(fill=tk.BOTH, expand=True)
