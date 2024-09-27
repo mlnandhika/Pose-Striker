@@ -59,6 +59,7 @@ class GameLogic:
                     self.pose_id = (self.pose_id + 1) % len(self.reference_images)
                     self.current_reference_image = cv2.imread(self.reference_images[self.pose_id])
                     reference_pose = self.pose_detector.get_pose_landmarks(self.current_reference_image)
+                    reference_pose_img, reference_pose = self.pose_detector.get_pose_img_and_landmarks(self.current_reference_image)
 
             # Break the loop if 'q' is pressed
             if cv2.waitKey(1) & 0xFF == ord('q'):
