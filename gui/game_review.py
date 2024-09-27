@@ -45,11 +45,11 @@ class GameReview(tk.Frame):
 
         # Play Again button (only show if attempts are left)
         if chances > 0:
-            self.play_again_button = tk.Button(self, text="Play Again", command=self.play_again)
+            self.play_again_button = tk.Button(self, text="Play Again", command=self.play_again, bg="gold2")
             self.play_again_button.pack(pady=5)
         
         # Main Menu button
-        self.main_menu_button = tk.Button(self, text="Main Menu", command=self.return_to_main_menu)
+        self.main_menu_button = tk.Button(self, text="Main Menu", command=self.return_to_main_menu,bg="gold2")
         self.main_menu_button.pack(pady=5)
 
     def play_again(self):

@@ -38,7 +38,7 @@ class GameFrame(tk.Frame):
         threading.Thread(target=self.update_timer, daemon=True).start()
 
         # Give up button
-        self.give_up_button = tk.Button(self, text="Give Up", command=self.end_game)
+        self.give_up_button = tk.Button(self, text="Give Up", command=self.end_game,bg="gold2")
         self.give_up_button.pack(pady=10)
 
     def update_timer(self):
