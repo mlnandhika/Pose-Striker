@@ -24,13 +24,13 @@ class GameFrame(tk.Frame):
         self.middle_frame = tk.Frame(self)
         self.middle_frame.pack(pady=10)
 
-        self.reference_img = Image.open("assets/reference_poses/dummy_pose1.jpg")
-        self.reference_img = self.reference_img.resize((200, 200), resample=3)
+        self.reference_img = Image.open("assets/reference_poses/dummy_pose2.jpg")
+        self.reference_img = self.reference_img.resize((600, 500), resample=3)
         self.reference_imgtk = ImageTk.PhotoImage(self.reference_img)
         self.reference_label = tk.Label(self.middle_frame, image=self.reference_imgtk)
         self.reference_label.pack(side=tk.LEFT, padx=20)
 
-        self.video_label = tk.Label(self.middle_frame)
+        self.video_label = tk.Label(self.middle_frame, width=700, height=700)
         self.video_label.pack(side=tk.LEFT, padx=20)
 
         self.camera_feed = CameraFeed(self.video_label)
@@ -40,6 +40,7 @@ class GameFrame(tk.Frame):
         # Give up button
         self.give_up_button = tk.Button(self, text="Give Up", command=self.end_game,bg="gold2")
         self.give_up_button.pack(pady=10)
+        self.give_up_button.place(relx=0.5, rely=0.90, anchor=tk.CENTER, width=100, height=30)
 
     def update_timer(self):
         while self.time_left > 0 and self.timer_running:
