@@ -6,13 +6,15 @@ class CameraFeed:
         self.label = label
         self.cap = cv2.VideoCapture(0)
         self.running = True
+        self.frame = None
         self.update_feed()
 
     def update_feed(self):
         if self.running:
-            ret, frame = self.cap.read()
+            ret, self.frame = self.cap.read()
             if ret:
-                frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                self.frame = cv2.flip(self.frame, 1)
+                frame = cv2.cvtColor(self.frame, cv2.COLOR_BGR2RGB)
                 img = Image.fromarray(frame)
                 imgtk = ImageTk.PhotoImage(image=img)
                 self.label.imgtk = imgtk
@@ -22,3 +24,6 @@ class CameraFeed:
     def stop(self):
         self.running = False
         self.cap.release()
+    
+    def get_frame(self):
+        return self.frame

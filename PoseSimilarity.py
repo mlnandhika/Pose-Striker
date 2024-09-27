@@ -42,8 +42,6 @@ class poseDetector():
                 h, w, c = img.shape
                 cx, cy = int(lm.x * w), int(lm.y * h)
                 self.lmList.append([id, cx, cy])
-                if draw:
-                    cv2.circle(img, (cx, cy), 5, (255, 0, 0), cv2.FILLED)
         return self.lmList
 
     def findAngle(self, img, p1, p2, p3, draw=True):
@@ -115,8 +113,8 @@ def main():
     while True:
         success, img = cap.read()
         img = cv2.flip(img, 1)
-        img = detector.findPose(img)
-        live_pose = detector.findPosition(img, draw=False)
+        img = detector.findPose(img, draw=False)
+        live_pose = detector.findPosition(img, draw=True)
         
         # Compare the live pose with the reference pose
         if len(ref_pose) != 0 and len(live_pose) != 0:
