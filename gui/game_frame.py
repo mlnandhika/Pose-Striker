@@ -29,7 +29,7 @@ class GameFrame(tk.Frame):
         self.middle_frame.pack(pady=10)
 
         # Define the possible extensions
-        extensions = ['.png', '.jpg', '.jpeg']
+        extensions = ['.png', '.jpg', '.jpeg', '.webp']
 
         # Create the list of reference images
         reference_poses_dir = 'assets/reference_poses/'
