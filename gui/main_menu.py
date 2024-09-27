@@ -1,11 +1,11 @@
 import tkinter as tk
 from gui.components import ScrollableLeaderboard, DropdownMenu
 from gui.game_frame import GameFrame
+from game_logic.player_manager import PlayerManager
 
 class MainMenu(tk.Frame):
-    def __init__(self, parent, leaderboard):
+    def __init__(self, parent):
         super().__init__(parent)
-        self.leaderboard = leaderboard
 
         # Title
         self.title = tk.Label(self, text="Pose Striker", font=("Arial", 24))
@@ -37,12 +37,22 @@ class MainMenu(tk.Frame):
         self.start_button.pack(pady=10)
 
     def update_leaderboard(self):
-        self.leaderboard_display.update_leaderboard(self.leaderboard.get_top_players())
+        pm = PlayerManager.get_instance()
+        self.leaderboard_display.update_leaderboard(pm.get_leaderboard())
 
     def start_game(self):
         player_name = self.name_entry.get()
         player_cluster = self.cluster_dropdown.get()
+        
         if player_name and player_cluster:
-            self.pack_forget()  # Hide main menu
-            game_frame = GameFrame(self.master, player_name, player_cluster, self.leaderboard, chances=3)
-            game_frame.pack(fill=tk.BOTH, expand=True)
+            pm = PlayerManager.get_instance()
+            player_exist = pm.player_exists(player_name, player_cluster)
+            chances = pm.get_remaining_attempts(player_name, player_cluster)
+            if not player_exist or player_exist and chances:
+                if not player_exist:
+                    pm.add_player(player_name, player_cluster)
+                pm.set_current_player(player_name, player_cluster)
+
+                self.pack_forget()  # Hide main menu
+                game_frame = GameFrame(self.master)
+                game_frame.pack(fill=tk.BOTH, expand=True)

@@ -1,6 +1,5 @@
 import tkinter as tk
 from gui.main_menu import MainMenu
-from game_logic.leaderboard import Leaderboard
 
 # Function to toggle fullscreen mode
 def toggle_fullscreen(event=None):
@@ -13,6 +12,7 @@ def exit_fullscreen(event=None):
 
 def main():
     global root
+
     root = tk.Tk()
     root.title("Pose Striker")
     root.geometry("800x600")
@@ -21,11 +21,8 @@ def main():
     root.attributes("-fullscreen", True)
     root.bind("<Escape>", exit_fullscreen)  # Bind Escape to exit fullscreen
 
-    # Shared leaderboard instance
-    leaderboard = Leaderboard()
-
     # Initialize Main Menu
-    main_menu = MainMenu(root, leaderboard)
+    main_menu = MainMenu(root)
     main_menu.pack(fill=tk.BOTH, expand=True)
 
     # Bind F11 to toggle fullscreen

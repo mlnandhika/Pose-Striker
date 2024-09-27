@@ -121,7 +121,6 @@ def main():
         # Compare the live pose with the reference pose
         if len(ref_pose) != 0 and len(live_pose) != 0:
             if detector.comparePoses(ref_pose, live_pose):
-                print("Pose Match!")
                 cv2.putText(img, "Pose Match!", (50, 50), cv2.FONT_HERSHEY_PLAIN, 3, (0, 255, 0), 3)
                 if match_start_time == 0:
                     match_start_time = time.time()
