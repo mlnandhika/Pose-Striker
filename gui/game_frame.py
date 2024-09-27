@@ -1,23 +1,21 @@
 import tkinter as tk
+
 from camera.camera_feed import CameraFeed
+from game_logic.player_manager import PlayerManager
 from PIL import Image, ImageTk
 import threading
 import time
 
 class GameFrame(tk.Frame):
-    def __init__(self, parent, player_name, cluster, leaderboard, chances, timer_running=True):
+    def __init__(self, parent, timer_running=True):
         super().__init__(parent)
-        self.player_name = player_name
-        self.cluster = cluster
-        self.leaderboard = leaderboard
         self.time_left = 3  # Time limit for the game
-        self.score = 0
-        self.chances = chances
 
         # Display score and time left
+        pm = PlayerManager.get_instance()
         self.top_frame = tk.Frame(self)
         self.top_frame.pack(pady=5)
-        self.score_label = tk.Label(self.top_frame, text=f"Score: {self.score}")
+        self.score_label = tk.Label(self.top_frame, text=f"Score: {pm.get_player_score()}")
         self.score_label.pack(side=tk.LEFT, padx=10)
         self.timer_label = tk.Label(self.top_frame, text=f"Time left: {self.time_left}")
         self.timer_label.pack(side=tk.LEFT, padx=10)
@@ -36,7 +34,7 @@ class GameFrame(tk.Frame):
         self.video_label.pack(side=tk.LEFT, padx=20)
 
         self.camera_feed = CameraFeed(self.video_label)
-        self.timer_running = True
+        self.timer_running = timer_running
         threading.Thread(target=self.update_timer, daemon=True).start()
 
         # Give up button
@@ -52,11 +50,18 @@ class GameFrame(tk.Frame):
             self.end_game()
 
     def end_game(self):
+        pm = PlayerManager.get_instance()
+        pm.decrement_player_attempts(*pm.get_current_player())
+        pm.update_leaderboard()
+
         self.timer_running = False
-        self.chances -= 1
         self.camera_feed.stop()
         self.pack_forget()
+
         # Transition to session review
         from gui.game_review import GameReview
-        game_review = GameReview(self.master, self.player_name, self.cluster, self.score, self.leaderboard, self.chances)
+        game_review = GameReview(self.master)
         game_review.pack(fill=tk.BOTH, expand=True)
+
+    def change_ref_photo(self):
+        pass
