@@ -8,7 +8,7 @@ def current_time_ms():
     return round(time.time() * 1000)
 
 class GameLogic:
-    def __init__(self, reference_images, camera_feed, on_score_update):
+    def __init__(self, reference_images, camera_feed, on_score_update, on_combo_update):
         """
         Initialize GameLogic.
 
@@ -22,60 +22,74 @@ class GameLogic:
         self.reference_images = reference_images
         self.camera_feed = camera_feed
         self.on_score_update = on_score_update
+        self.on_combo_update = on_combo_update
         self.pose_id = 0
         self.combo_timeout = 5000
         self.last_match_time = 0
         self.max_combo = 10
         self.score_multiplier = 1  # Adjust this value to control score multiplier
+        self.reference_pose_img = None
+        self.reference_pose = []
+        self.live_pose_img = None
+        self.live_pose = []
 
         # Load initial reference image and pose detector
         self.current_reference_image = cv2.imread(self.reference_images[self.pose_id])
-        self.pose_detector = PoseDetector()
+        self.live_pose_detector = PoseDetector()
+        self.static_pose_detector = PoseDetector(static_image_mode=True)
 
     def compare_poses(self):
         """
         Compare the pose from the camera feed with the reference pose.
         Display the reference pose and live pose with landmarks drawn.
         """
-        reference_pose_img, reference_pose = self.pose_detector.get_pose_img_and_landmarks(self.current_reference_image)
+        self.reference_pose_img, self.reference_pose = self.get_current_reference_pose()
 
         while self.game_running:
             img = self.camera_feed.get_frame()
-            live_pose_img, live_pose = self.pose_detector.get_pose_img_and_landmarks(img)
+            self.live_pose_img, self.live_pose = self.live_pose_detector.get_pose_img_and_landmarks(img)
 
             # Display both images side by side
             # cv2.imshow('Reference Pose', reference_img_with_landmarks)
-            cv2.imshow('Live Pose', live_pose_img)
-            cv2.imshow('Ref Pose', reference_pose_img)
+            cv2.imshow('Live Pose', self.live_pose_img)
+            cv2.imshow('Ref Pose', self.reference_pose_img)
 
             # Compare poses
-            if len(live_pose) != 0 and len(reference_pose) != 0:
-                match = self.pose_detector.compare_pose(reference_pose, live_pose)
+            if len(self.live_pose) != 0 and len(self.reference_pose) != 0:
+                match = self.live_pose_detector.compare_pose(self.reference_pose, self.live_pose)
                 if match:
                     self.last_match_time = current_time_ms()  # Reset combo timer
                     self.update_score()
 
                     # Load a new reference image when a pose is successfully matched
-                    self.pose_id = (self.pose_id + 1) % len(self.reference_images)
-                    self.current_reference_image = cv2.imread(self.reference_images[self.pose_id])
-                    reference_pose = self.pose_detector.get_pose_landmarks(self.current_reference_image)
-                    reference_pose_img, reference_pose = self.pose_detector.get_pose_img_and_landmarks(self.current_reference_image)
+                    self.next_photo()
 
             # Break the loop if 'q' is pressed
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 self.game_running = False
+            
+            # Reset score multiplier if combo breaks
+            if current_time_ms() - self.last_match_time >= self.combo_timeout:
+                self.update_combo()
+                self.on_combo_update(self.score_multiplier)
 
         cv2.destroyAllWindows()
+
+    def next_photo(self):
+        self.pose_id = (self.pose_id + 1) % len(self.reference_images)
+        self.current_reference_image = cv2.imread(self.reference_images[self.pose_id])
+        self.reference_pose_img, self.reference_pose = self.get_current_reference_pose()
+
+    def get_current_reference_pose(self):
+        return self.static_pose_detector.get_pose_img_and_landmarks(self.current_reference_image)
+        
 
     def update_score(self):
         """
         Update player score based on the current multiplier and combo status.
         """
-        if self.is_combo():
-            self.score_multiplier += 1
-            self.score_multiplier %= self.max_combo + 1
-        else:
-            self.score_multiplier = 1  # Reset multiplier if no consecutive match
+        self.update_combo()
+        self.on_combo_update(self.score_multiplier)
 
         gain = 1 * self.score_multiplier
         new_score = self.pm.get_player_score() + gain
@@ -98,6 +112,13 @@ class GameLogic:
         else:
             self.last_match_time = current_time
             return False
+
+    def update_combo(self):
+        if self.is_combo():
+            self.score_multiplier += 1
+            self.score_multiplier %= self.max_combo + 1
+        else:
+            self.score_multiplier = 1  # Reset multiplier if no consecutive match
 
     def end_game(self):
         """

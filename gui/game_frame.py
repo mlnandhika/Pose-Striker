@@ -17,10 +17,12 @@ class GameFrame(tk.Frame):
         pm = PlayerManager.get_instance()
         self.top_frame = tk.Frame(self)
         self.top_frame.pack(pady=5)
-        self.score_label = tk.Label(self.top_frame, text=f"Score: {pm.get_player_score()}")
-        self.score_label.pack(side=tk.LEFT, padx=10)
         self.timer_label = tk.Label(self.top_frame, text=f"Time left: {self.time_left}")
         self.timer_label.pack(side=tk.LEFT, padx=10)
+        self.score_label = tk.Label(self.top_frame, text=f"Score: {pm.get_player_score()}")
+        self.score_label.pack(side=tk.LEFT, padx=10)
+        self.combo_label = tk.Label(self.top_frame, text="")
+        self.combo_label.pack(side=tk.LEFT, padx=10)
 
         # Reference image and video feed
         self.middle_frame = tk.Frame(self)
@@ -52,12 +54,16 @@ class GameFrame(tk.Frame):
         self.timer_running = timer_running
         threading.Thread(target=self.update_timer, daemon=True).start()
 
+         # Skip Pose button
+        self.give_up_button = tk.Button(self, text="Skip Pose", command=self.skip_pose, bg="gold2")
+        self.give_up_button.pack(pady=10)
+
         # Give up button
-        self.give_up_button = tk.Button(self, text="Give Up", command=self.end_game,bg="gold2")
+        self.give_up_button = tk.Button(self, text="Give Up", command=self.end_game, bg="red")
         self.give_up_button.pack(pady=10)
 
         # Game Logic initialization
-        self.game_logic = GameLogic(self.reference_images, self.camera_feed, self.update_score)
+        self.game_logic = GameLogic(self.reference_images, self.camera_feed, self.update_score, self.update_combo_text)
         self.game_logic.start_game()
 
     def update_timer(self):
@@ -73,6 +79,12 @@ class GameFrame(tk.Frame):
         self.score_label.config(text=f"Score: {pm.get_player_score()}")
         self.change_ref_photo()
 
+    def update_combo_text(self, combo):
+        if combo > 1:
+            self.combo_label.config(text=f'{combo}x')
+        else:
+            self.combo_label.config(text="")
+
     def end_game(self):
         pm = PlayerManager.get_instance()
         pm.decrement_player_attempts(*pm.get_current_player())
@@ -87,6 +99,10 @@ class GameFrame(tk.Frame):
         from gui.game_review import GameReview
         game_review = GameReview(self.master)
         game_review.pack(fill=tk.BOTH, expand=True)
+
+    def skip_pose(self):
+        self.change_ref_photo()
+        self.game_logic.next_photo()
 
     def change_ref_photo(self):
         self.pose_id += 1
