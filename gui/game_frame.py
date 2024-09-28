@@ -56,6 +56,7 @@ class GameFrame(tk.Frame):
          # Skip Pose button
         self.skip_pose_button = tk.Button(self, text="Skip Pose", command=self.skip_pose, bg="gold2")
         self.skip_pose_button.pack(pady=10)
+        self.skip_pose_button.place(relx=0.5, rely=0.80, anchor=tk.CENTER, width=100, height=30)
 
         # Give up button
         self.give_up_button = tk.Button(self, text="Give Up", command=self.end_game, bg="red")
