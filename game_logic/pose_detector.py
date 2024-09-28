@@ -109,7 +109,7 @@ class PoseDetector:
         if not is_complete:
             raise Exception('Cannot get complete landmarks for the image!')
 
-        print(self.complete_landmarks)
+        # print(self.complete_landmarks)
         return self.complete_landmarks
 
     def get_pose_img_and_landmarks(self, img):
@@ -154,7 +154,7 @@ class PoseDetector:
             cv2.putText(img, str(int(angle)), (x2 - 50, y2 + 50), cv2.FONT_HERSHEY_PLAIN, 2, (0, 0, 255), 2)
         return angle
 
-    def compare_pose(self, pose1, pose2, threshold=21):
+    def compare_pose(self, pose1, pose2, threshold=23):
         """
         Compares two poses by checking the angles formed by various keypoints.
 

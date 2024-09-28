@@ -28,9 +28,9 @@ class GameLogic:
         self.last_match_time = 0
         self.max_combo = 10
         self.score_multiplier = 1  # Adjust this value to control score multiplier
-        self.reference_pose_img = None
+        # self.reference_pose_img = None
         self.reference_pose = []
-        self.live_pose_img = None
+        # self.live_pose_img = None
         self.live_pose = []
 
         # Load initial reference image and pose detector
@@ -50,9 +50,8 @@ class GameLogic:
             self.live_pose_img, self.live_pose = self.live_pose_detector.get_pose_img_and_landmarks(img)
 
             # Display both images side by side
-            # cv2.imshow('Reference Pose', reference_img_with_landmarks)
-            cv2.imshow('Live Pose', self.live_pose_img)
-            cv2.imshow('Ref Pose', self.reference_pose_img)
+            # cv2.imshow('Live Pose', self.live_pose_img)
+            # cv2.imshow('Ref Pose', self.reference_pose_img)
 
             # Compare poses
             if len(self.live_pose) != 0 and len(self.reference_pose) != 0:
@@ -65,20 +64,20 @@ class GameLogic:
                     self.next_photo()
 
             # Break the loop if 'q' is pressed
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                self.game_running = False
+            # if cv2.waitKey(1) & 0xFF == ord('q'):
+            #     self.game_running = False
             
             # Reset score multiplier if combo breaks
             if current_time_ms() - self.last_match_time >= self.combo_timeout:
                 self.update_combo()
                 self.on_combo_update(self.score_multiplier)
 
-        cv2.destroyAllWindows()
+        # cv2.destroyAllWindows()
 
     def next_photo(self):
         self.pose_id = (self.pose_id + 1) % len(self.reference_images)
         self.current_reference_image = cv2.imread(self.reference_images[self.pose_id])
-        self.reference_pose_img, self.reference_pose = self.get_current_reference_pose()
+        _, self.reference_pose = self.get_current_reference_pose()
 
     def get_current_reference_pose(self):
         return self.static_pose_detector.get_pose_img_and_landmarks(self.current_reference_image)
