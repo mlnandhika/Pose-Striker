@@ -40,7 +40,7 @@ class GameFrame(tk.Frame):
         self.pose_id = 0
 
         self.reference_img = Image.open(self.reference_images[self.pose_id])
-        self.reference_img = self.reference_img.resize((600, 500), resample=3)
+        self.reference_img = self.reference_img.resize((700, 525), resample=3)
 
         self.reference_imgtk = ImageTk.PhotoImage(self.reference_img)
         self.reference_label = tk.Label(self.middle_frame, image=self.reference_imgtk)
@@ -110,6 +110,7 @@ class GameFrame(tk.Frame):
 
         # Step 1: Load a new image
         self.reference_img = Image.open(self.reference_images[self.pose_id])
+        self.reference_img = self.reference_img.resize((700, 525), resample=3)
 
         # Step 2: Create a new ImageTk.PhotoImage object
         self.reference_imgtk = ImageTk.PhotoImage(self.reference_img)

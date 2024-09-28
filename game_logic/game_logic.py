@@ -43,14 +43,13 @@ class GameLogic:
         Compare the pose from the camera feed with the reference pose.
         Display the reference pose and live pose with landmarks drawn.
         """
-        _, self.reference_pose = self.get_current_reference_pose()
+        self.reference_pose_img, self.reference_pose = self.get_current_reference_pose()
 
         while self.game_running:
             img = self.camera_feed.get_frame()
-            _, self.live_pose = self.live_pose_detector.get_pose_img_and_landmarks(img)
+            self.live_pose_img, self.live_pose = self.live_pose_detector.get_pose_img_and_landmarks(img)
 
             # Display both images side by side
-            # cv2.imshow('Reference Pose', reference_img_with_landmarks)
             # cv2.imshow('Live Pose', self.live_pose_img)
             # cv2.imshow('Ref Pose', self.reference_pose_img)
 
