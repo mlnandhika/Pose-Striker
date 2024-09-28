@@ -34,7 +34,7 @@ class MainMenu(tk.Frame):
         self.cluster_frame = tk.Frame(self,bg="gold2")
         self.cluster_frame.pack(pady=5)
         self.cluster_frame.place(relx=0.5, rely=0.76, anchor=tk.CENTER, width=250, height=50)
-        self.cluster_dropdown = DropdownMenu(self.cluster_frame, ["Cluster 1", "Cluster 2", "Cluster 3"])
+        self.cluster_dropdown = DropdownMenu(self.cluster_frame, ["Cluster 1", "Cluster 2", "Cluster 3", "Cluster 4", "Cluster 5", "Cluster 6", "Cluster 7", "Cluster 8", "Cluster 9", "Cluster 10", "Cluster 11", "Cluster 12", "Cluster 13", "Cluster 14", "Cluster 15", "Cluster 16", "Cluster 17", "Cluster 18", "Cluster 19", "Cluster 20", "Cluster 21", "Cluster 22"])
 
         # Start button
         self.start_button = tk.Button(self, text="Start", command=self.start_game,bg="OliveDrab1")

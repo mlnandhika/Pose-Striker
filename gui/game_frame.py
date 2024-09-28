@@ -42,12 +42,13 @@ class GameFrame(tk.Frame):
         self.pose_id = 0
 
         self.reference_img = Image.open(self.reference_images[self.pose_id])
-        # self.reference_img = self.reference_img.resize((200, 200), resample=3)
+        self.reference_img = self.reference_img.resize((600, 500), resample=3)
+
         self.reference_imgtk = ImageTk.PhotoImage(self.reference_img)
         self.reference_label = tk.Label(self.middle_frame, image=self.reference_imgtk)
         self.reference_label.pack(side=tk.LEFT, padx=20)
 
-        self.video_label = tk.Label(self.middle_frame)
+        self.video_label = tk.Label(self.middle_frame, width=700, height=700)
         self.video_label.pack(side=tk.LEFT, padx=20)
 
         self.camera_feed = CameraFeed(self.video_label)
@@ -61,6 +62,7 @@ class GameFrame(tk.Frame):
         # Give up button
         self.give_up_button = tk.Button(self, text="Give Up", command=self.end_game, bg="red")
         self.give_up_button.pack(pady=10)
+        self.give_up_button.place(relx=0.5, rely=0.90, anchor=tk.CENTER, width=100, height=30)
 
         # Game Logic initialization
         self.game_logic = GameLogic(self.reference_images, self.camera_feed, self.update_score, self.update_combo_text)
