@@ -56,8 +56,8 @@ class GameFrame(tk.Frame):
         threading.Thread(target=self.update_timer, daemon=True).start()
 
          # Skip Pose button
-        self.give_up_button = tk.Button(self, text="Skip Pose", command=self.skip_pose, bg="gold2")
-        self.give_up_button.pack(pady=10)
+        self.skip_pose_button = tk.Button(self, text="Skip Pose", command=self.skip_pose, bg="gold2")
+        self.skip_pose_button.pack(pady=10)
 
         # Give up button
         self.give_up_button = tk.Button(self, text="Give Up", command=self.end_game, bg="red")
