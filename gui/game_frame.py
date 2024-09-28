@@ -34,7 +34,7 @@ class GameFrame(tk.Frame):
         # Create the list of reference images
         reference_poses_dir = 'assets/reference_poses/'
         # Get all files in the directory and filter by image extensions
-        self.reference_images = [file for file in os.listdir(reference_poses_dir) if os.path.splitext(file)[1].lower() in extensions]
+        self.reference_images = [os.path.join(reference_poses_dir, file) for file in os.listdir(reference_poses_dir) if os.path.splitext(file)[1].lower() in extensions]
 
 
         self.pose_id = 0
