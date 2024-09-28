@@ -33,12 +33,10 @@ class GameFrame(tk.Frame):
 
         # Create the list of reference images
         reference_poses_dir = 'assets/reference_poses/'
-        self.reference_images = [
-            f'{reference_poses_dir}dummy_pose{str(i).zfill(2)}{ext}'
-            for i in range(1, 21)
-            for ext in extensions
-            if os.path.exists(f'{reference_poses_dir}dummy_pose{str(i).zfill(2)}{ext}')
-        ]
+        # Get all files in the directory and filter by image extensions
+        self.reference_images = [os.path.join(reference_poses_dir, file) for file in os.listdir(reference_poses_dir) if os.path.splitext(file)[1].lower() in extensions]
+
+
         self.pose_id = 0
 
         self.reference_img = Image.open(self.reference_images[self.pose_id])
@@ -56,8 +54,10 @@ class GameFrame(tk.Frame):
         threading.Thread(target=self.update_timer, daemon=True).start()
 
          # Skip Pose button
-        self.give_up_button = tk.Button(self, text="Skip Pose", command=self.skip_pose, bg="gold2")
-        self.give_up_button.pack(pady=10)
+        self.skip_pose_button = tk.Button(self, text="Skip Pose", command=self.skip_pose, bg="gold2")
+        self.skip_pose_button.pack(pady=10)
+        self.skip_pose_button.place(relx=0.5, rely=0.80, anchor=tk.CENTER, width=100, height=30)
+
 
         # Give up button
         self.give_up_button = tk.Button(self, text="Give Up", command=self.end_game, bg="red")
@@ -112,6 +112,7 @@ class GameFrame(tk.Frame):
 
         # Step 1: Load a new image
         self.reference_img = Image.open(self.reference_images[self.pose_id])
+        self.reference_img = self.reference_img.resize((600, 500), resample=3)
 
         # Step 2: Create a new ImageTk.PhotoImage object
         self.reference_imgtk = ImageTk.PhotoImage(self.reference_img)
