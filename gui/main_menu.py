@@ -21,7 +21,7 @@ class MainMenu(tk.Frame):
 
         # Memuat gambar PNG 1
         Image.MAX_IMAGE_PIXELS = None
-        self.image1 = Image.open(r"C:\\Users\\acern\\Hansel\\Pose-Striker\\assets\\main\\1.png")
+        self.image1 = Image.open(r"assets/decor/1.png")
         self.new_size1 = (200, 200)  # Ukuran gambar yang diubah
         self.resized_image1 = self.image1.resize(self.new_size1, Image.Resampling.LANCZOS)
         self.photo1 = ImageTk.PhotoImage(self.resized_image1)
@@ -29,7 +29,7 @@ class MainMenu(tk.Frame):
         self.image_label1.place(relx=0.85, rely=0.99, anchor=tk.SW, width=200, height=200)
 
         # Memuat gambar PNG 2
-        self.image2 = Image.open(r"C:\\Users\\acern\\Hansel\\Pose-Striker\\assets\\main\\2.png")
+        self.image2 = Image.open(r"assets/decor/2.png")
         self.new_size2 = (200, 200)  # Ukuran gambar yang diubah
         self.resized_image2 = self.image2.resize(self.new_size2, Image.Resampling.LANCZOS)
         self.photo2 = ImageTk.PhotoImage(self.resized_image2)
@@ -37,7 +37,7 @@ class MainMenu(tk.Frame):
         self.image_label2.place(relx=0.70, rely=0.99, anchor=tk.SW, width=200, height=200)
 
         # Memuat gambar PNG 3
-        self.image3 = Image.open(r"C:\\Users\\acern\\Hansel\\Pose-Striker\\assets\\main\\3.png")
+        self.image3 = Image.open(r"assets/decor/3.png")
         self.new_size3 = (200, 200)  # Ukuran gambar yang diubah
         self.resized_image3 = self.image3.resize(self.new_size3, Image.Resampling.LANCZOS)
         self.photo3 = ImageTk.PhotoImage(self.resized_image3)
@@ -45,7 +45,7 @@ class MainMenu(tk.Frame):
         self.image_label3.place(relx=0.20, rely=0.99, anchor=tk.SW, width=200, height=200)
 
         # Memuat gambar PNG 4
-        self.image4 = Image.open(r"C:\\Users\\acern\\Hansel\\Pose-Striker\\assets\\main\\4.png")
+        self.image4 = Image.open(r"assets/decor/4.png")
         self.new_size4 = (200, 200)  # Ukuran gambar yang diubah
         self.resized_image4 = self.image4.resize(self.new_size4, Image.Resampling.LANCZOS)
         self.photo4 = ImageTk.PhotoImage(self.resized_image4)
@@ -53,7 +53,7 @@ class MainMenu(tk.Frame):
         self.image_label4.place(relx=0.01, rely=0.99, anchor=tk.SW, width=200, height=200)
 
         # Memuat gambar PNG 5
-        self.image5 = Image.open(r"C:\\Users\\acern\\Hansel\\Pose-Striker\\assets\\main\\Logo_Universitas_Brawijaya.png")
+        self.image5 = Image.open(r"assets/decor/Logo_Universitas_Brawijaya.png")
         self.new_size5 = (100,100)  # Ukuran gambar yang diubah
         self.resized_image5 = self.image5.resize(self.new_size5, Image.Resampling.LANCZOS)
         self.photo5 = ImageTk.PhotoImage(self.resized_image5)
@@ -61,7 +61,7 @@ class MainMenu(tk.Frame):
         self.image_label5.place(relx=0.01, rely=0.13, anchor=tk.SW, width=100, height=100)
 
         # Memuat gambar PNG 4
-        self.image6 = Image.open(r"C:\\Users\\acern\\Hansel\\Pose-Striker\\assets\\main\\Filkom_UB.png")
+        self.image6 = Image.open(r"assets/decor/Filkom_UB.png")
         self.new_size6 = (200, 100)  # Ukuran gambar yang diubah
         self.resized_image6 = self.image6.resize(self.new_size6, Image.Resampling.LANCZOS)
         self.photo6 = ImageTk.PhotoImage(self.resized_image6)
@@ -69,7 +69,7 @@ class MainMenu(tk.Frame):
         self.image_label6.place(relx=0.08, rely=0.13, anchor=tk.SW, width=200, height=100)
 
         # Memuat gambar PNG 4
-        self.image7 = Image.open(r"C:\\Users\\acern\\Hansel\\Pose-Striker\\assets\\main\\Logo_Robotiik_HD_Logo.png")
+        self.image7 = Image.open(r"assets/decor/Logo_Robotiik_HD_Logo.png")
         self.new_size7 = (100, 100)  # Ukuran gambar yang diubah
         self.resized_image7 = self.image7.resize(self.new_size7, Image.Resampling.LANCZOS)
         self.photo7 = ImageTk.PhotoImage(self.resized_image7)
