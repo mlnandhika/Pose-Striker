@@ -177,7 +177,7 @@ class PoseDetector:
         for p1, p2, p3 in angles_to_compare:
             angle1 = self.__calculate_angle(pose1, p1, p2, p3)
             angle2 = self.__calculate_angle(pose2, p1, p2, p3)
-            print(f'angle{abs(angle1 - angle2)}')
+            # print(f'angle{abs(angle1 - angle2)}')
             if abs(angle1 - angle2) > threshold:
                 return False
         return True
