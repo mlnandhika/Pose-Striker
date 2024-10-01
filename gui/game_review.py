@@ -84,7 +84,7 @@ class GameReview(tk.Frame):
 
             self.main_menu_button = tk.Button(self, image=self.main_menu_button_image_tk, command=self.return_to_main_menu, bg="gold2")
             self.main_menu_button.pack(pady=5)
-            self.main_menu_button.place(relx=0.4k, rely=0.88, anchor=tk.CENTER, width=150, height=45)
+            self.main_menu_button.place(relx=0.4, rely=0.88, anchor=tk.CENTER, width=150, height=45)
 
         else:
             self.main_menu_button_image = Image.open(r"assets/decor/menu.png")  # Path to main menu image
