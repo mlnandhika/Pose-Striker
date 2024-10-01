@@ -9,17 +9,25 @@ import os
 
 class GameFrame(tk.Frame):
     def __init__(self, parent, timer_running=True):
+
         super().__init__(parent)
         self.time_left = 90  # Time limit for the game
 
-        # Background Color
-        self.config(bg="#D8D2C2")
+        # Load and resize background image using Pillow
+        image = Image.open(r"assets/decor/game frame.png")
+        resized_image = image.resize((1600,900), Image.LANCZOS)  # Resize image using LANCZOS
+
+        self.bg_image = ImageTk.PhotoImage(resized_image)
+
+        # Create a label to hold the background image
+        self.bg_label = tk.Label(self, image=self.bg_image)
+        self.bg_label.place(relx=0, y=0, relwidth=1, relheight=1)  # Make it full screen
 
         pm = PlayerManager.get_instance()
 
         # Middle frame for reference image, score, timer, and combo
-        self.middle_frame = tk.Frame(self, bg="#D8D2C2")
-        self.middle_frame.pack(pady=(10, 0))
+        self.middle_frame = tk.Frame(self)
+        self.middle_frame.pack(pady=0)  # Set pady to 0 for no vertical padding
 
         # Define the possible extensions
         extensions = ['.png', '.jpg', '.jpeg', '.webp']
@@ -37,29 +45,29 @@ class GameFrame(tk.Frame):
         # Step 2: Create a new ImageTk.PhotoImage object
         self.reference_imgtk = ImageTk.PhotoImage(self.reference_img)
 
-        # Reference label with background color
-        self.reference_label = tk.Label(self.middle_frame, image=self.reference_imgtk, bg="#D8D2C2")
-        self.reference_label.pack(side=tk.LEFT, padx=20)
+        # Reference label without background color
+        self.reference_label = tk.Label(self.middle_frame, image=self.reference_imgtk)
+        self.reference_label.pack(side=tk.LEFT, padx=0)  # Set padx to 0 for no horizontal paddin
 
         # Frame for score, timer, and combo inside reference image
-        self.overlay_frame = tk.Frame(self.middle_frame, bg="#D8D2C2")
-        self.overlay_frame.place(x=20, y=20, width=700, height=50)
+        self.overlay_frame = tk.Frame(self.middle_frame)
+        self.overlay_frame.place(x=20, y=20)
 
         # Score label (Top-left)
-        self.score_label = tk.Label(self.overlay_frame, text=f"Score: {pm.get_player_score()}", bg="#D8D2C2", font=("Arial", 30))
+        self.score_label = tk.Label(self.overlay_frame, text=f"Score: {pm.get_player_score()}", font=("Arial", 30))
         self.score_label.pack(side=tk.LEFT, padx=10)
 
         # Combo label (Top-right)
-        self.combo_label = tk.Label(self.overlay_frame, text="", bg="#D8D2C2", font=("Arial", 30))
+        self.combo_label = tk.Label(self.overlay_frame, text="", font=("Arial", 30))
         self.combo_label.pack(side=tk.LEFT, padx=50)
 
         # Timer label (Centered)
-        self.timer_label = tk.Label(self.overlay_frame, text=f"Time left: {self.time_left}", bg="#D8D2C2", font=("Arial", 30))
+        self.timer_label = tk.Label(self.overlay_frame, text=f"Time left: {self.time_left}", font=("Arial", 30))
         self.timer_label.pack(side=tk.LEFT, padx=70)
 
-        # Video feed label with background color
-        self.video_label = tk.Label(self.middle_frame, width=750, height=750, bg="#D8D2C2")
-        self.video_label.pack(side=tk.RIGHT, padx=20)
+        # Video feed label without background color
+        self.video_label = tk.Label(self.middle_frame, width=750, height=750)
+        self.video_label.pack(side=tk.RIGHT, padx=0)  # Set padx to 0 for no horizontal padding
 
         self.camera_feed = CameraFeed(self.video_label)
         self.timer_running = timer_running
