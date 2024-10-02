@@ -8,7 +8,7 @@ def current_time_ms():
     return round(time.time() * 1000)
 
 class GameLogic:
-    def __init__(self, reference_images, camera_feed, on_score_update, on_combo_update):
+    def __init__(self, reference_images, camera_feed, on_score_update, on_combo_update, on_match_status_update):
         """
         Initialize GameLogic.
 
@@ -23,6 +23,7 @@ class GameLogic:
         self.camera_feed = camera_feed
         self.on_score_update = on_score_update
         self.on_combo_update = on_combo_update
+        self.on_match_status_update = on_match_status_update 
         self.pose_id = 0
         self.combo_timeout = 5000
         self.last_match_time = 0
@@ -59,9 +60,12 @@ class GameLogic:
                 if match:
                     self.last_match_time = current_time_ms()  # Reset combo timer
                     self.update_score()
+                    self.on_match_status_update(True)
 
                     # Load a new reference image when a pose is successfully matched
                     self.next_photo()
+                else:
+                    self.on_match_status_update(False)
 
             # Break the loop if 'q' is pressed
             # if cv2.waitKey(1) & 0xFF == ord('q'):

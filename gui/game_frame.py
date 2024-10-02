@@ -11,7 +11,7 @@ class GameFrame(tk.Frame):
     def __init__(self, parent, timer_running=True):
 
         super().__init__(parent)
-        self.time_left = 90  # Time limit for the game
+        self.time_left = 60  # Time limit for the game
 
         # Load and resize background image using Pillow
         image = Image.open(r"assets/decor/game frame.png")
@@ -65,6 +65,10 @@ class GameFrame(tk.Frame):
         self.timer_label = tk.Label(self.overlay_frame, text=f"Time left: {self.time_left}", font=("Arial", 30))
         self.timer_label.pack(side=tk.LEFT, padx=70)
 
+        # Pose label
+        self.match_status_label = tk.Label(self.middle_frame, text="No match", font=("Arial", 30), fg="red")
+        self.match_status_label.pack(side=tk.TOP, pady=0)
+
         # Video feed label without background color
         self.video_label = tk.Label(self.middle_frame, width=750, height=750)
         self.video_label.pack(side=tk.RIGHT, padx=0)  # Set padx to 0 for no horizontal padding
@@ -82,7 +86,7 @@ class GameFrame(tk.Frame):
         self.give_up_button.place(relx=0.55, rely=0.85, anchor=tk.CENTER, width=100, height=30)
 
         # Game Logic initialization
-        self.game_logic = GameLogic(self.reference_images, self.camera_feed, self.update_score, self.update_combo_text)
+        self.game_logic = GameLogic(self.reference_images, self.camera_feed, self.update_score, self.update_combo_text, self.update_match_status)
         self.game_logic.start_game()
 
     def update_timer(self):
@@ -103,6 +107,12 @@ class GameFrame(tk.Frame):
             self.combo_label.config(text=f'{combo}x')
         else:
             self.combo_label.config(text="")
+    
+    def update_match_status(self, match):
+        if match:
+            self.match_status_label.config(text="Pose Match", fg="green")
+        else:
+            self.match_status_label.config(text="No match", fg="red")
 
     def end_game(self):
         pm = PlayerManager.get_instance()
